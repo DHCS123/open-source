@@ -1,0 +1,90 @@
+repeat wait() until game:IsLoaded()
+
+getgenv().CashAura = false
+
+local DHCSCA = Instance.new("ScreenGui")
+local main = Instance.new("Frame")
+local Design = Instance.new("TextLabel")
+local CashAuraLabel = Instance.new("TextLabel")
+local CashAuraToggleLabel = Instance.new("TextLabel")
+
+DHCSCA.Name = "DHCSCA"
+DHCSCA.Parent = game.CoreGui
+DHCSCA.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+main.Name = "main"
+main.Parent = DHCSCA
+main.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+main.Position = UDim2.new(0.444707751, 0, 0.536337197, 0)
+main.Size = UDim2.new(0, 193, 0, 64)
+main.Active = true
+main.Draggable = true
+
+Design.Name = "Design"
+Design.Parent = main
+Design.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Design.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Design.Position = UDim2.new(0.657470047, 0, 0, 0)
+Design.Size = UDim2.new(0, 10, 0, 64)
+Design.Font = Enum.Font.SourceSans
+Design.Text = ""
+Design.TextColor3 = Color3.fromRGB(0, 0, 0)
+Design.TextSize = 14.000
+
+CashAuraLabel.Name = "CashAuraLabel"
+CashAuraLabel.Parent = main
+CashAuraLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+CashAuraLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+CashAuraLabel.Size = UDim2.new(0, 126, 0, 64)
+CashAuraLabel.Font = Enum.Font.Creepster
+CashAuraLabel.Text = "Cash Aura"
+CashAuraLabel.TextColor3 = Color3.fromRGB(0, 175, 0)
+CashAuraLabel.TextScaled = true
+CashAuraLabel.TextSize = 26.000
+CashAuraLabel.TextWrapped = true
+
+CashAuraToggleLabel.Name = "CashAuraToggleLabel"
+CashAuraToggleLabel.Parent = main
+CashAuraToggleLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+CashAuraToggleLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+CashAuraToggleLabel.Position = UDim2.new(0.704663217, 0, 0, 0)
+CashAuraToggleLabel.Size = UDim2.new(0, 57, 0, 64)
+CashAuraToggleLabel.Font = Enum.Font.Creepster
+CashAuraToggleLabel.Text = "Off"
+CashAuraToggleLabel.TextColor3 = Color3.fromRGB(175, 0, 0)
+CashAuraToggleLabel.TextScaled = true
+CashAuraToggleLabel.TextSize = 14.000
+CashAuraToggleLabel.TextWrapped = true
+
+uis = game:GetService("UserInputService")
+
+uis.InputBegan:Connect(function(Input)
+	if Input.KeyCode == Enum.KeyCode.B then
+		if getgenv().CashAura == false then
+			getgenv().CashAura = true
+			CashAuraToggleLabel.Text = "On"
+			CashAuraToggleLabel.TextColor3 = Color3.fromRGB(0, 175, 0)
+		elseif getgenv().CashAura == true then
+			getgenv().CashAura = false
+			CashAuraToggleLabel.Text = "Off"
+			CashAuraToggleLabel.TextColor3 = Color3.fromRGB(175, 0, 0)
+		end
+	end
+end)
+
+game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Cash Aura", Text = "Toggle With B", Duration = 10})
+
+spawn(function()
+	while wait() do
+		for i,v in pairs(game:GetService("Workspace").Ignored.Drop:GetChildren()) do
+            if v.Name == "MoneyDrop" then
+                if (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < v.ClickDetector.MaxActivationDistance then
+                    if getgenv().CashAura == true then
+                        fireclickdetector(v.ClickDetector, 1)
+                    end
+                end
+            end
+        end
+	end
+end)
